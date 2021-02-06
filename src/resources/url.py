@@ -1,4 +1,4 @@
-import uuid
+import datetime
 
 from flask_restful import Resource, fields, marshal_with
 from flask_restful import reqparse
@@ -24,15 +24,16 @@ post_reqparse.add_argument('life_period', type=int, default=90, choices=range(36
 
 
 class DaysItem(fields.Raw):
-    # TODO check how work with list of attributes
-    def format(self, values):
-        print(values)
-        return 10
+    def format(self, value):
+        return value
+
+    def output(self, key, obj):
+        return obj.life_period - (datetime.datetime.now() - obj.created_at).days
 
 
 class UUIDItem(fields.Raw):
     def format(self, value):
-        return str(uuid.UUID(value))
+        return str(value)
 
 
 url_fields = {
@@ -40,7 +41,7 @@ url_fields = {
     'full_url': fields.String,
     'url_hash': fields.String,
     'life_period': fields.Integer,
-    'left_days': DaysItem(attribute=['life_period', 'created_at']),
+    'left_days': DaysItem(),
     'created_at': fields.DateTime,
 }
 
@@ -51,4 +52,9 @@ class UrlAPI(Resource):
         args = post_reqparse.parse_args()
         print(args)
         result = UrlRepository.create(full_url=args['full_url'], life_period=args['life_period'])
+        print(result)
         return result
+
+    @marshal_with(url_fields)
+    def get(self):
+        return UrlRepository.list()

@@ -10,7 +10,6 @@ from flask import redirect
 app = create_app()
 
 migrate = Migrate(app, db)
-print(app.config)
 
 
 @app.route('/<short_url>')
@@ -22,4 +21,3 @@ def hello_world(short_url):
 # API
 api = Api(app)
 api.add_resource(UrlAPI, '/api/v1/url')
-# api.add_resource(UrlAPI, '/<str:short_url>')

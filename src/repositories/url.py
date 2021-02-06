@@ -41,3 +41,7 @@ class UrlRepository:
             'life_period': url.life_period
         }
         return result
+
+    @staticmethod
+    def list() -> list:
+        return UrlModel.query.all()

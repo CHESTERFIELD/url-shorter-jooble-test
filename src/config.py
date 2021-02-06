@@ -1,11 +1,22 @@
 import os
+from utils import get_env_variable
+
+POSTGRES_URL = get_env_variable('POSTGRES_URL')
+POSTGRES_USER = get_env_variable('POSTGRES_USER')
+POSTGRES_PASSWORD = get_env_variable('POSTGRES_PASSWORD')
+POSTGRES_DB = get_env_variable('POSTGRES_DB')
 
 
 class Config(object):
     DEBUG = False
     TESTING = False
     # SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:postgres@localhost:5432/jooble_project"
+    uri_template = 'postgresql://{user}:{pw}@{url}/{db}'
+    SQLALCHEMY_DATABASE_URI = uri_template.format(
+        user=POSTGRES_USER,
+        pw=POSTGRES_PASSWORD,
+        url=POSTGRES_URL,
+        db=POSTGRES_DB)
 
     # Silence the deprecation warning
     SQLALCHEMY_TRACK_MODIFICATIONS = False

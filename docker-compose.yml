@@ -1,0 +1,31 @@
+version: '3.4'
+services:
+  db:
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/fileserver/urls/bono:/var/lib/postgresql/data/pgdata
+  web:
+    image: test-jooble-flask
+    build:
+      context: .
+      dockerfile: ./docker/flask/Dockerfile
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_URL: db:5432
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+      - ./migrations:/app/migrations
