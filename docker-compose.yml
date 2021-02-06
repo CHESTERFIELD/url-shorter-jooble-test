@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - /home/fileserver/urls/bono:/var/lib/postgresql/data/pgdata
+      - /home/fileserver/urls/db:/var/lib/postgresql/data/
   web:
     image: test-jooble-flask
     build:
@@ -23,7 +23,7 @@ services:
       POSTGRES_PASSWORD: example
       POSTGRES_URL: db:5432
     ports:
-      - "5000:5000"
+      - "8000:8000"
     depends_on:
       - db
     volumes:
