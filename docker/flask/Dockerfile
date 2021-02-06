@@ -17,8 +17,6 @@ RUN pip install -r /app/req.txt
 # Run flask app
 EXPOSE 8000
 
-ENV FLASK_APP="src/main.py" FLASK_DEBUG=1 FLASK_ENV=docker
+ENV FLASK_APP="src/main.py" FLASK_DEBUG=1 FLASK_ENV=development
 
 RUN ls -la /app && sed -i 's/\r//' /app/start.sh && chmod +x /app/start.sh
-
-ENTRYPOINT ["./start.sh"]

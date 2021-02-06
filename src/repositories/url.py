@@ -16,31 +16,31 @@ class UrlRepository:
             url = UrlModel(full_url=full_url, url_hash=url_hash, life_period=life_period)
             db.session.add(url)
             db.session.commit()
-            result = {
-                'id': url.id,
-                'full_url': url.full_url,
-                'url_hash': url.url_hash,
-                'created_at': str(url.created_at),
-                'life_period': url.life_period
-            }
+            # result = {
+            #     'id': url.id,
+            #     'full_url': url.full_url,
+            #     'url_hash': url.url_hash,
+            #     'created_at': url.created_at,
+            #     'life_period': url.life_period
+            # }
         except IntegrityError:
             db.session.rollback()
             raise ResourceExists('url already exists')
 
-        return result
+        return url
 
     @staticmethod
     def get(url_hash: str) -> dict:
         """ Query a user by username """
         url = UrlModel.query.filter_by(url_hash=url_hash).first_or_404()
-        result = {
-            'id': url.id,
-            'full_url': url.full_url,
-            'url_hash': url.url_hash,
-            'created_at': str(url.created_at),
-            'life_period': url.life_period
-        }
-        return result
+        # result = {
+        #     'id': url.id,
+        #     'full_url': url.full_url,
+        #     'url_hash': url.url_hash,
+        #     'created_at': url.created_at,
+        #     'life_period': url.life_period
+        # }
+        return url
 
     @staticmethod
     def list() -> list:

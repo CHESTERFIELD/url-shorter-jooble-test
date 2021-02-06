@@ -4,6 +4,7 @@ from flask_restful import Resource, fields, marshal_with
 from flask_restful import reqparse
 from urllib.parse import urlparse
 from repositories.url import UrlRepository
+from config import SITE_DOMAIN, SITE_PROTOCOL, SITE_PORT
 
 
 def url(full_url):
@@ -31,6 +32,12 @@ class DaysItem(fields.Raw):
         return obj.life_period - (datetime.datetime.now() - obj.created_at).days
 
 
+class URLItem(fields.Raw):
+    def format(self, value):
+        return '{scheme}://{domain}:{port}/{hash_url}'.format(scheme=SITE_PROTOCOL, domain=SITE_DOMAIN,
+                                                              port=SITE_PORT, hash_url=value)
+
+
 class UUIDItem(fields.Raw):
     def format(self, value):
         return str(value)
@@ -39,10 +46,10 @@ class UUIDItem(fields.Raw):
 url_fields = {
     'id': UUIDItem(attribute='id'),
     'full_url': fields.String,
-    'url_hash': fields.String,
+    'url_hash': URLItem(attribute='url_hash'),
     'life_period': fields.Integer,
     'left_days': DaysItem(),
-    'created_at': fields.DateTime,
+    'created_at': fields.String,
 }
 
 
@@ -50,10 +57,8 @@ class UrlAPI(Resource):
     @marshal_with(url_fields)
     def post(self):
         args = post_reqparse.parse_args()
-        print(args)
         result = UrlRepository.create(full_url=args['full_url'], life_period=args['life_period'])
-        print(result)
-        return result
+        return result, 201
 
     @marshal_with(url_fields)
     def get(self):

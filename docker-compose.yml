@@ -3,29 +3,35 @@ services:
   db:
     image: postgres:11
     restart: always
-    environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: example
+    env_file: .env
     ports:
       - "5432:5432"
     volumes:
       - /home/fileserver/urls/db:/var/lib/postgresql/data/
   web:
-    image: test-jooble-flask
     build:
       context: .
       dockerfile: ./docker/flask/Dockerfile
     restart: always
-    environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: example
-      POSTGRES_URL: db:5432
+    env_file: .env
+    entrypoint: ["./start.sh"]
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - redis
     volumes:
       - ./src:/app/src
       - ./migrations:/app/migrations
+
+  redis:
+      image: redis:latest
+
+  worker:
+    build:
+      context: .
+      dockerfile: ./docker/flask/Dockerfile
+    env_file: .env
+    command: celery -A celery worker --loglevel=info
+    depends_on:
+      - redis

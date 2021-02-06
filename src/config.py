@@ -6,8 +6,16 @@ POSTGRES_USER = get_env_variable('POSTGRES_USER')
 POSTGRES_PASSWORD = get_env_variable('POSTGRES_PASSWORD')
 POSTGRES_DB = get_env_variable('POSTGRES_DB')
 
+SITE_DOMAIN = get_env_variable('SITE_DOMAIN')
+SITE_PROTOCOL = get_env_variable('SITE_PROTOCOL')
+SITE_PORT = get_env_variable('SITE_PORT')
+
 
 class Config(object):
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+    BROKER_URL = CELERY_BROKER_URL
+
     DEBUG = False
     TESTING = False
     # SQLAlchemy
