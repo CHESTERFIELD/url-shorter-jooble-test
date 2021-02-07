@@ -1,5 +1,5 @@
 from flask_restful import Api
-from app import create_app
+from app_creator import create_app
 
 from resources.url import UrlAPI
 

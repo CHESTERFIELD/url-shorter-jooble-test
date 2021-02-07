@@ -1,6 +1,9 @@
 import os
 from utils import get_env_variable
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+
 POSTGRES_URL = get_env_variable('POSTGRES_URL')
 POSTGRES_USER = get_env_variable('POSTGRES_USER')
 POSTGRES_PASSWORD = get_env_variable('POSTGRES_PASSWORD')
@@ -12,9 +15,12 @@ SITE_PORT = get_env_variable('SITE_PORT')
 
 
 class Config(object):
-    CELERY_BROKER_URL = 'redis://localhost:6379/0'
-    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+    CELERY_BROKER_URL = 'redis://redis:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+    CELERY_TASK_SERIALIZER = 'json'
     BROKER_URL = CELERY_BROKER_URL
+
+    C_FORCE_ROOT = True
 
     DEBUG = False
     TESTING = False
@@ -32,7 +38,6 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
-    FLASK_ENV = 'development'
     DEBUG = True
 
 

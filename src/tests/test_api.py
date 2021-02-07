@@ -2,8 +2,8 @@ import random
 import string
 import unittest
 
-from api import create_api
-from app import create_app
+from api_creator import create_api
+from app_creator import create_app
 import json
 import faker
 

@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy.exc import IntegrityError
 
 from bl.url_shorter_helper import UrlShorterHelper
@@ -9,20 +11,16 @@ from models import db
 class UrlRepository:
 
     @staticmethod
-    def create(full_url: str, life_period: int) -> dict:
+    def create(full_url: str, life_period: int) -> UrlModel:
         """ Create user """
         try:
+            current_date = datetime.date.today()
+            expire_date = current_date + datetime.timedelta(days=life_period)
             url_hash = UrlShorterHelper.get_unique_hash_url(full_url)
-            url = UrlModel(full_url=full_url, url_hash=url_hash, life_period=life_period)
+            url = UrlModel(full_url=full_url, url_hash=url_hash, expire_date=expire_date)
             db.session.add(url)
             db.session.commit()
-            # result = {
-            #     'id': url.id,
-            #     'full_url': url.full_url,
-            #     'url_hash': url.url_hash,
-            #     'created_at': url.created_at,
-            #     'life_period': url.life_period
-            # }
+
         except IntegrityError:
             db.session.rollback()
             raise ResourceExists('url already exists')
@@ -30,16 +28,10 @@ class UrlRepository:
         return url
 
     @staticmethod
-    def get(url_hash: str) -> dict:
+    def get(url_hash: str) -> UrlModel:
         """ Query a user by username """
         url = UrlModel.query.filter_by(url_hash=url_hash).first_or_404()
-        # result = {
-        #     'id': url.id,
-        #     'full_url': url.full_url,
-        #     'url_hash': url.url_hash,
-        #     'created_at': url.created_at,
-        #     'life_period': url.life_period
-        # }
+
         return url
 
     @staticmethod

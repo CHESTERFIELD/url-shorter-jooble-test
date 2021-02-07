@@ -29,7 +29,7 @@ class DaysItem(fields.Raw):
         return value
 
     def output(self, key, obj):
-        return obj.life_period - (datetime.datetime.now() - obj.created_at).days
+        return (obj.expire_date.date - (datetime.datetime.now() - obj.created_at)).days
 
 
 class URLItem(fields.Raw):
@@ -47,7 +47,7 @@ url_fields = {
     'id': UUIDItem(attribute='id'),
     'full_url': fields.String,
     'url_hash': URLItem(attribute='url_hash'),
-    'life_period': fields.Integer,
+    'expire_date': fields.String,
     'left_days': DaysItem(),
     'created_at': fields.String,
 }
