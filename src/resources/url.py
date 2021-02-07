@@ -11,7 +11,7 @@ def url(full_url):
     """Return full_url if valid, raise an exception in other case."""
     # TODO need write correct validation
     result = urlparse(full_url)
-    print(result)
+    # print(result)
     if result.path and result.scheme and result.netloc:
         return full_url
     else:
