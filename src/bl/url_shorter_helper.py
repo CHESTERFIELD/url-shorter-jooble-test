@@ -17,7 +17,7 @@ class UrlShorterHelper(object):
         # last_seven_bytes = url_byte_array[-7:]
         # url_hash = base64.b64encode(last_seven_bytes).decode("utf-8")[:-2]
         characters = string.digits + string.ascii_letters
-        url_hash = ''.join(choices(characters, k=8))
+        url_hash = ''.join(choices(characters, k=7))
 
         if UrlModel.query.filter_by(url_hash=url_hash).first():
             return UrlShorterHelper.get_unique_hash_url(url)

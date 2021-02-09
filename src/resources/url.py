@@ -2,20 +2,17 @@ import datetime
 
 from flask_restful import Resource, fields, marshal_with
 from flask_restful import reqparse
-from urllib.parse import urlparse
+import validators
 from repositories.url import UrlRepository
 from config import SITE_DOMAIN, SITE_PROTOCOL, SITE_PORT
 
 
 def url(full_url):
     """Return full_url if valid, raise an exception in other case."""
-    # TODO need write correct validation
-    result = urlparse(full_url)
-    # print(result)
-    if result.path and result.scheme and result.netloc:
+    if validators.url(full_url):
         return full_url
     else:
-        raise ValueError('{} is not a valid email'.format(full_url))
+        raise ValueError('{} is not a valid url'.format(full_url))
 
 
 post_reqparse = reqparse.RequestParser()
@@ -29,7 +26,8 @@ class DaysItem(fields.Raw):
         return value
 
     def output(self, key, obj):
-        return (obj.expire_date.date - (datetime.datetime.now() - obj.created_at)).days
+        dt = datetime.datetime.combine(obj.expire_date, datetime.datetime.min.time())
+        return (dt - obj.created_at).days
 
 
 class URLItem(fields.Raw):

@@ -6,12 +6,14 @@ from app_creator import create_app
 from flask_migrate import Migrate
 from celery_creator import create_celery
 from models import db, UrlModel
-from repositories.url import UrlRepository
-from flask import redirect
 from celery.utils.log import get_task_logger
 
 # flask
+from routes import short
+
 app = create_app()
+
+app.register_blueprint(short)
 
 migrate = Migrate(app, db)
 
@@ -36,12 +38,6 @@ def create_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
-
-
-@app.route('/<short_url>')
-def hello_world(short_url):
-    url = UrlRepository.get(url_hash=short_url)
-    return redirect(url.full_url), 301
 
 
 @celery.task(name="delete_expired_urls")
