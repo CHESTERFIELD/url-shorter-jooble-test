@@ -4,16 +4,21 @@ from flask_restful import Resource, fields, marshal_with
 from flask_restful import reqparse
 import validators
 from werkzeug.routing import ValidationError
+
+from models import UrlModel
 from repositories.url import UrlRepository
 from config import SITE_DOMAIN, SITE_PROTOCOL, SITE_PORT
 
 
 def url(full_url):
     """Return full_url if valid, raise an exception in other case."""
-    if validators.url(full_url):
-        return full_url
-    else:
+    if not validators.url(full_url):
         raise ValidationError('{} is not a valid url'.format(full_url))
+
+    if UrlModel.query.filter_by(full_url=full_url).first():
+        raise ValidationError('{} is already exists'.format(full_url))
+
+    return full_url
 
 
 post_reqparse = reqparse.RequestParser()
