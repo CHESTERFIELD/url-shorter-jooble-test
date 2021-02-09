@@ -1,6 +1,5 @@
 import validators
 from flask import Blueprint, render_template, request, redirect
-
 from repositories.url import UrlRepository
 
 short = Blueprint('short', __name__)
@@ -22,6 +21,12 @@ def add_link():
         raise ValueError('{} is not a valid url'.format(full_url))
 
     life_period = request.form['life_period']
+
+    # if this url already exists render it
+    exist_url = UrlRepository.get_exist_url(full_url)
+    if exist_url:
+        return render_template('link_added.html', new_link=exist_url.url_hash, original_url=exist_url.full_url)
+
     result = UrlRepository.create(full_url=full_url, life_period=int(life_period))
 
     return render_template('link_added.html', new_link=result.url_hash, original_url=result.full_url)

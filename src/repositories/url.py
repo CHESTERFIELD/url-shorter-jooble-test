@@ -35,5 +35,12 @@ class UrlRepository:
         return url
 
     @staticmethod
+    def get_exist_url(full_url: str) -> UrlModel:
+        """ Query a user by username """
+        url = UrlModel.query.filter_by(full_url=full_url).first()
+
+        return url
+
+    @staticmethod
     def list() -> list:
         return UrlModel.query.all()

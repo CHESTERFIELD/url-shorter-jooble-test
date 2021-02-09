@@ -15,7 +15,7 @@ def url(full_url):
     if not validators.url(full_url):
         raise ValidationError('{} is not a valid url'.format(full_url))
 
-    if UrlModel.query.filter_by(full_url=full_url).first():
+    if UrlRepository.get_exist_url(full_url):
         raise ValidationError('{} is already exists'.format(full_url))
 
     return full_url
