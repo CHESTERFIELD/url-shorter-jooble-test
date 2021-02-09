@@ -7,3 +7,5 @@ pg/
 __pycache__
 .pytest_cache
 .idea
+
+src/celerybeat-schedule

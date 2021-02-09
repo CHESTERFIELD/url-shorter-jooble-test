@@ -3,6 +3,7 @@ import datetime
 from flask_restful import Resource, fields, marshal_with
 from flask_restful import reqparse
 import validators
+from werkzeug.routing import ValidationError
 from repositories.url import UrlRepository
 from config import SITE_DOMAIN, SITE_PROTOCOL, SITE_PORT
 
@@ -12,7 +13,7 @@ def url(full_url):
     if validators.url(full_url):
         return full_url
     else:
-        raise ValueError('{} is not a valid url'.format(full_url))
+        raise ValidationError('{} is not a valid url'.format(full_url))
 
 
 post_reqparse = reqparse.RequestParser()
