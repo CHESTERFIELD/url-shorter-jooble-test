@@ -1,23 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <section class="section">
-        <div class="container">
-            <div class="field">
-                <label class="label">Original URL</label>
-                <div class="control">
-                    <input class="input" type="text" name="original_url" value="{{ original_url }}">
-                </div>
-            </div>
-            <div style="margin-top: 20px" class="field">
-                <label class="label">Shorter URL</label>
-                <div class="control">
-                    <input class="input" type="text" name="original_url" value="{{ url_for('short.redirect_to_url', short_url=new_link, _external=True) }}">
-                </div>
-            </div>
-            <p style="margin-top: 20px">
-                <a href="{{ url_for('short.index') }}">Home</a>
-            </p>
+    <div class="field">
+        <label class="label">Original URL</label>
+        <div class="control">
+            <input class="input" type="text" name="original_url" value="{{ original_url }}">
         </div>
-    </section>
+    </div>
+    <div style="margin-top: 20px" class="field">
+        <label class="label">Shorter URL</label>
+        <div class="control">
+            <input class="input" type="text" name="original_url" value="{{ url_for('short.redirect_to_url', short_url=new_link, _external=True) }}">
+        </div>
+    </div>
+    <p style="margin-top: 20px">
+        <a href="{{ url_for('short.index') }}"><button class="btn btn-info">Go home</button></a>
+    </p>
 {% endblock %}

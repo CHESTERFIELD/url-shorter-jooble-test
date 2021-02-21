@@ -1,7 +1,5 @@
-import json
-
 import validators
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_required, login_user, logout_user
 
 from models import User
@@ -21,13 +19,18 @@ def add_link():
 
     # validate received url
     if not validators.url(full_url):
-        raise ValueError('{} is not a valid url'.format(full_url))
+        flash('{} is not a valid url'.format(full_url))
+        return redirect(url_for('short.index'))
 
-    life_period = int(request.form['life_period'])
+    if not request.form['life_period']:
+        life_period = 90
+    else:
+        life_period = int(request.form['life_period'])
 
-    # validate received url
-    if life_period not in range(1, 365):
-        raise ValueError('{} is not a life period'.format(str(life_period)))
+        # validate received url
+        if life_period not in range(1, 365):
+            flash('{} is not a valid life period. Choose between 1 and 365 days'.format(str(life_period)))
+            return redirect(url_for('short.index'))
 
     # if this url already exists render it
     exist_url = UrlRepository.get_exist_url(full_url)
@@ -37,17 +40,6 @@ def add_link():
     result = UrlRepository.create(full_url=full_url, life_period=int(life_period))
 
     return render_template('link_added.html', new_link=result.url_hash, original_url=result.full_url)
-
-
-@short.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
-
-
-@short.route('/<short_url>')
-def redirect_to_url(short_url):
-    url = UrlRepository.get(url_hash=short_url)
-    return redirect(url.full_url), 301
 
 
 @short.route('/delete', methods=['POST'])
@@ -88,9 +80,8 @@ def login():
         login_user(user)
         return redirect(url_for('short.index'))
     else:
-        # TODO GET ERROR
-        return jsonify({"status": 401,
-                        "reason": "Username or Password Error"})
+        flash("Username or Password Error")
+        return redirect(url_for('short.index'))
 
 
 @short.route('/logout', methods=['POST'])
@@ -98,3 +89,14 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('short.index'))
+
+
+@short.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+@short.route('/<short_url>')
+def redirect_to_url(short_url):
+    url = UrlRepository.get(url_hash=short_url)
+    return redirect(url.full_url), 301

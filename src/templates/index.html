@@ -1,25 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <section class="section">
-        <div class="container">
-            <form method="POST" action="{{ url_for('short.add_link') }}">
-                <div class="field">
-                    <label class="label">Original URL</label>
-                    <!--Full URL-->
-                    <div class="control">
-                        <input class="input" type="text" name="original_url" placeholder="Enter a valid URL">
-                    </div>
-                    <label style="margin-top: 20px" class="label">Life period (days)</label>
-                    <!--Life period-->
-                    <div class="control">
-                        <input class="input" type="text" name="life_period" placeholder="Enter number from 1 to 365">
-                    </div>
-                </div>
-                <div style="margin-top: 20px" class="control">
-                    <button type="submit" class="button is-info">Do it shorter</button>
-                </div>
-            </form>
+    <form method="POST" action="{{ url_for('short.add_link') }}">
+        <div class="field">
+            <label class="label">Original URL</label>
+            <!--Full URL-->
+            <div class="control">
+                <input class="input" type="text" name="original_url" placeholder="Enter a valid URL">
+            </div>
+            <label style="margin-top: 20px" class="label">Life period (days)</label>
+            <!--Life period-->
+            <div class="control">
+                <input class="input" type="text" name="life_period" placeholder="Enter number from 1 to 365 (Default - 90)">
+            </div>
         </div>
-    </section>
+        <div style="margin-top: 20px" class="control">
+            <button type="submit" class="button is-info">Do it shorter</button>
+        </div>
+    </form>
 {% endblock %}
