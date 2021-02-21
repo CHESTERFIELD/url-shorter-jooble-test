@@ -15,6 +15,7 @@ SITE_PORT = get_env_variable('SITE_PORT')
 
 
 class Config(object):
+    SECRET_KEY = 'super secret key'
     CELERY_BROKER_URL = 'redis://redis:6379/0'
     CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
     CELERY_TASK_SERIALIZER = 'json'

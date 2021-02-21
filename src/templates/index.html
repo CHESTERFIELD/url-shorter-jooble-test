@@ -1,38 +1,25 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-</head>
-
-<body>
+{% block content %}
     <section class="section">
         <div class="container">
             <form method="POST" action="{{ url_for('short.add_link') }}">
                 <div class="field">
                     <label class="label">Original URL</label>
+                    <!--Full URL-->
                     <div class="control">
-                        <input class="input" type="text" name="original_url">
+                        <input class="input" type="text" name="original_url" placeholder="Enter a valid URL">
                     </div>
-                    <label class="label">Life period (days)</label>
-                    <select size="5" name="life_period" style="width: 500px">
-                        <option selected="selected" value="1">1</option>
-                        {% for n in range(2, 366) %}
-                            <option value="{{ n }}">{{ n }}</option>
-                        {% endfor %}
-                   </select>
+                    <label style="margin-top: 20px" class="label">Life period (days)</label>
+                    <!--Life period-->
+                    <div class="control">
+                        <input class="input" type="text" name="life_period" placeholder="Enter number from 1 to 365">
+                    </div>
                 </div>
-                <div class="control">
-                    <button type="submit" class="button is-info">Shorten</button>
+                <div style="margin-top: 20px" class="control">
+                    <button type="submit" class="button is-info">Do it shorter</button>
                 </div>
-
             </form>
         </div>
     </section>
-</body>
-
-</html>
+{% endblock %}

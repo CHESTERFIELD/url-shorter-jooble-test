@@ -51,6 +51,7 @@ url_fields = {
     'id': UUIDItem(attribute='id'),
     'full_url': fields.String,
     'url_hash': URLItem(attribute='url_hash'),
+    'full_url_title': fields.String,
     'expire_date': fields.String,
     'left_days': DaysItem(),
     'created_at': fields.String,
